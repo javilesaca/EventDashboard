@@ -19,7 +19,8 @@ public class EventService {
     }
 
     public Event saveEvent(EventDTO dto) {
-        Event e = new Event(dto.getType(), dto.getMessage(), dto.getSource(), LocalDateTime.now());;
+        LocalDateTime ts = dto.getTimestamp() != null ? dto.getTimestamp() : LocalDateTime.now();
+        Event e = new Event(dto.getType(), dto.getMessage(), dto.getSource(), ts);
         return eventRepository.save(e);
     }
 

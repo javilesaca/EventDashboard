@@ -1,19 +1,25 @@
 package pro.javilesaca.eventdashboard.controller;
 
+import io.swagger.v3.oas.annotations.media.*;
+import io.swagger.v3.oas.annotations.responses.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pro.javilesaca.eventdashboard.model.Event;
 import pro.javilesaca.eventdashboard.model.EventLog;
+import pro.javilesaca.eventdashboard.service.EventService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/docs/events")
 public class EventLogController {
+
+    private final EventService service;
+
+    public EventLogController(EventService service) {
+        this.service = service;
+    }
 
     @Operation(
             summary = "Obtener todos los eventos registrados",
@@ -25,36 +31,22 @@ public class EventLogController {
                     description = "Listado de eventos obtenido correctamente",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = EventLog.class),
-                            examples = @ExampleObject(
-                                    name = "Ejemplo de eventos",
-                                    summary = "Listado de eventos",
-                                    value = """
-                                    [
-                                        {
-                                            "id": "1",
-                                            "type": "LOGIN_SUCCESS",
-                                            "timestamp": "2025-04-10T10:15:30",
-                                            "description": "Usuario admin inició sesión con éxito"
-                                        },
-                                        {
-                                            "id": "2",
-                                            "type": "ERROR",
-                                            "timestamp": "2025-04-10T10:17:00",
-                                            "description": "Error al intentar guardar configuración"
-                                        }
-                                    ]
-                                    """
-                            )
+                            schema = @Schema(implementation = EventLog.class)
                     )
             ),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
     })
-    @GetMapping("/events")
-    public List<EventLog> getAllEvents() {
-        return List.of(
-                new EventLog("1", "LOGIN_SUCCESS", "2025-04-10T10:15:30", "Usuario admin inició sesión con éxito"),
-                new EventLog("2", "ERROR", "2025-04-10T10:17:00", "Error al intentar guardar configuración")
-        );
+    @GetMapping
+    public List<EventLog> getAllEventLogs() {
+        List<Event> events = service.getAllEvents();
+
+        return events.stream()
+                .map(event -> new EventLog(
+                        event.getId(),
+                        event.getType(),
+                        event.getTimestamp().toString(),
+                        event.getMessage()
+                ))
+                .collect(Collectors.toList());
     }
 }
