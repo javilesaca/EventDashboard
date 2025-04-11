@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos</title>
+
+    <!-- Enlace a la hoja de estilos CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Enlace a Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Lista de Eventos</h1>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Mensaje</th>
+            <th>Fuente</th>
+            <th>Fecha</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterar sobre los eventos que se pasaron desde el controlador -->
+        <tr th:each="event : ${events}">
+            <td th:text="${event.id}"></td>
+            <td th:text="${event.type}"></td>
+            <td th:text="${event.message}"></td>
+            <td th:text="${event.source}"></td>
+            <td th:text="${event.timestamp}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Agregar scripts de Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

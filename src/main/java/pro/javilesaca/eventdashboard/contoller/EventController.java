@@ -2,6 +2,11 @@ package pro.javilesaca.eventdashboard.contoller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pro.javilesaca.eventdashboard.dto.EventDTO;
+import pro.javilesaca.eventdashboard.service.EventService;
+import pro.javilesaca.eventdashboard.model.Event;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
