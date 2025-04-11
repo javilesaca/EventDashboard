@@ -57,7 +57,7 @@ La aplicación también está accesible en el navegador en: http://localhost:808
 | POST |	/api/events |	Crear un nuevo evento |
 | GET |	/api/events	| 	Listar todos los eventos registrados|
 
-Ejemplo de creación de evento (POST)
+***Ejemplo de creación de evento (POST)***
 
 Cuerpo de la solicitud (JSON):
 ```bash
