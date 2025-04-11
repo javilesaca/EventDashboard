@@ -21,7 +21,7 @@ Aplicación web desarrollada con Spring Boot para capturar, gestionar y visualiz
 - Thymeleaf (para el frontend)
 - Docker (para la implementación)
 - Maven
-- Swagger OpenAPI (documentación REST)
+- Springdoc OpenAPI (documentación de la API)
 - API REST
 
 ---
@@ -107,6 +107,16 @@ Este proyecto puede ser ejecutado en Docker para una fácil implementación. Uti
 ```bash
 docker-compose up
 ```
+
+---
+
+## 📘 Documentación de la API
+
+La documentación interactiva de la API está disponible a través de Swagger:
+
+Accede a: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+Aquí puedes ver todos los endpoints de la API, realizar pruebas y ver ejemplos de solicitudes y respuestas.
 
 ---
 
