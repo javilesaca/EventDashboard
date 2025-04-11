@@ -1,4 +1,4 @@
-package pro.javilesaca.eventdashboard.contoller;
+package pro.javilesaca.eventdashboard.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package pro.javilesaca.eventdashboard.contoller;
+package pro.javilesaca.eventdashboard.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
