@@ -87,6 +87,14 @@ Una vez que el backend esté en marcha, accede al panel visual para ver los even
 
 ---
 
+## 📊 Acceso al Frontend
+
+1. Abre tu navegador y ve a http://localhost:8080.
+
+2. Visualiza los eventos registrados en tiempo real.
+
+---
+
 ## 🧪 Pruebas 
 
 En desarrollo. Se puede añadir pruebas unitarias con JUnit 5 y pruebas de integración con Spring Boot Test para validar los endpoints.
@@ -95,7 +103,7 @@ En desarrollo. Se puede añadir pruebas unitarias con JUnit 5 y pruebas de integ
 
 ## 🔧 Docker
 
-Este proyecto puede ser ejecutado en Docker para una fácil implementación. Utiliza el archivo docker-compose.yml para levantar la base de datos MongoDB.
+Este proyecto puede ser ejecutado en Docker para una fácil implementación. Utiliza el archivo `docker-compose.yml` para levantar la base de datos MongoDB.
 ```bash
 docker-compose up
 ```
