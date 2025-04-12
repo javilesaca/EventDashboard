@@ -36,7 +36,7 @@ public class EventLogController {
             ),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
     })
-    @GetMapping
+    @GetMapping("/events")
     public List<EventLog> getAllEventLogs() {
         List<Event> events = service.getAllEvents();
 
