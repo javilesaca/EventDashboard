@@ -6,7 +6,7 @@ import pro.javilesaca.eventdashboard.model.Event;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface EventRepository extends MongoRepository<Event, Long> {
+public interface EventRepository extends MongoRepository<Event, String> {
     // Buscar todos los eventos de un tipo específico
     List<Event> findByType(String type);
 
