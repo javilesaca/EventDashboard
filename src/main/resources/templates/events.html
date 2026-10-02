@@ -16,6 +16,27 @@
 <div class="container mt-5">
     <h1>Lista de Eventos <span id="live-badge" class="badge bg-success">EN VIVO</span></h1>
     <p class="text-muted">Los eventos nuevos aparecen automáticamente sin recargar la página.</p>
+
+    <div class="mb-3">
+        <span th:each="entry : ${counts}" class="badge bg-primary me-1"
+              th:text="${entry.key} + ': ' + ${entry.value}"></span>
+        <span th:if="${counts == null or counts.isEmpty()}" class="text-muted">Sin eventos todavía.</span>
+    </div>
+
+    <form method="get" action="/" class="row g-2 mb-3">
+        <div class="col-auto">
+            <input type="text" name="type" class="form-control" placeholder="Tipo (ej. ERROR)"
+                   th:value="${type}">
+        </div>
+        <div class="col-auto">
+            <input type="text" name="source" class="form-control" placeholder="Origen (ej. backend)"
+                   th:value="${source}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <a href="/" class="btn btn-secondary">Limpiar</a>
+        </div>
+    </form>
     <table class="table table-bordered">
         <thead>
         <tr>

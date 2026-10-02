@@ -82,6 +82,18 @@ class EventServiceTest {
     }
 
     @Test
+    void countByTypeGroupsTotals() {
+        org.bson.Document error = new org.bson.Document("_id", "ERROR").append("total", 3);
+        org.bson.Document info = new org.bson.Document("_id", "INFO").append("total", 7);
+        when(mongoTemplate.aggregate(any(org.springframework.data.mongodb.core.aggregation.Aggregation.class),
+                eq("events"), eq(org.bson.Document.class)))
+                .thenReturn(new org.springframework.data.mongodb.core.aggregation.AggregationResults<>(
+                        List.of(error, info), new org.bson.Document()));
+
+        assertThat(service.countByType()).containsExactlyInAnyOrderEntriesOf(java.util.Map.of("ERROR", 3L, "INFO", 7L));
+    }
+
+    @Test
     void searchAppliesFiltersAndPagination() {
         Event event = new Event("ERROR", "fallo", "backend", LocalDateTime.now());
         Pageable pageable = PageRequest.of(0, 20);

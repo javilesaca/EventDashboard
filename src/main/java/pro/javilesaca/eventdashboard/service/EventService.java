@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -15,6 +17,8 @@ import pro.javilesaca.eventdashboard.model.Event;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -66,5 +70,15 @@ public class EventService {
         long count = mongoTemplate.count(query, Event.class);
         List<Event> events = mongoTemplate.find(query.with(pageable), Event.class);
         return PageableExecutionUtils.getPage(events, pageable, () -> count);
+    }
+
+    public Map<String, Long> countByType() {
+        GroupOperation group = Aggregation.group("type").count().as("total");
+        return mongoTemplate.aggregate(Aggregation.newAggregation(group), "events", org.bson.Document.class)
+                .getMappedResults().stream()
+                .collect(Collectors.toMap(
+                        d -> d.getString("_id"),
+                        d -> ((Number) d.get("total")).longValue()
+                ));
     }
 }
