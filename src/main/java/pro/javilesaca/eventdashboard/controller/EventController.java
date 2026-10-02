@@ -1,7 +1,14 @@
 package pro.javilesaca.eventdashboard.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -10,6 +17,7 @@ import pro.javilesaca.eventdashboard.service.EventService;
 import pro.javilesaca.eventdashboard.model.Event;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Tag(name = "Eventos (Event)", description = "Operaciones relacionadas con el registro y consulta de eventos del sistema.")
@@ -39,11 +47,29 @@ public class EventController {
     }
 
     @Operation(
-            summary = "Listar todos los eventos",
-            description = "Devuelve una lista ordenada de todos los eventos registrados en la base de datos."
+            summary = "Listar eventos con filtros y paginación",
+            description = "Devuelve una página de eventos ordenados por timestamp descendente. Todos los filtros son opcionales."
     )
     @GetMapping
-    public List<Event> listEvents() {
-        return service.getAllEvents();
+    public Page<Event> listEvents(
+            @Parameter(description = "Filtrar por tipo exacto", example = "ERROR")
+            @RequestParam(required = false) String type,
+            @Parameter(description = "Filtrar por origen exacto", example = "backend")
+            @RequestParam(required = false) String source,
+            @Parameter(description = "Desde (ISO-8601)", example = "2025-01-01T00:00:00")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @Parameter(description = "Hasta (ISO-8601)", example = "2025-12-31T23:59:59")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @ParameterObject @PageableDefault(size = 20, sort = "timestamp", direction = Sort.Direction.DESC) Pageable pageable) {
+        return service.search(type, source, from, to, pageable);
+    }
+
+    @Operation(
+            summary = "Obtener un evento por id",
+            description = "Devuelve 404 si el evento no existe."
+    )
+    @GetMapping("/{id}")
+    public Event getEvent(@PathVariable String id) {
+        return service.getById(id);
     }
 }
