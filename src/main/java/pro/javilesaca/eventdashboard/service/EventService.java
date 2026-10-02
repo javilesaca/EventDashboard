@@ -21,16 +21,20 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final MongoTemplate mongoTemplate;
+    private final EventStreamService streamService;
 
-    public EventService(EventRepository eventRepository, MongoTemplate mongoTemplate) {
+    public EventService(EventRepository eventRepository, MongoTemplate mongoTemplate, EventStreamService streamService) {
         this.eventRepository = eventRepository;
         this.mongoTemplate = mongoTemplate;
+        this.streamService = streamService;
     }
 
     public Event saveEvent(EventDTO dto) {
         LocalDateTime ts = dto.getTimestamp() != null ? dto.getTimestamp() : LocalDateTime.now();
         Event e = new Event(dto.getType(), dto.getMessage(), dto.getSource(), ts);
-        return eventRepository.save(e);
+        Event saved = eventRepository.save(e);
+        streamService.publish(saved);
+        return saved;
     }
 
     public List<Event> getAllEvents() {

@@ -9,11 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pro.javilesaca.eventdashboard.dto.EventDTO;
 import pro.javilesaca.eventdashboard.service.EventService;
+import pro.javilesaca.eventdashboard.service.EventStreamService;
 import pro.javilesaca.eventdashboard.model.Event;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -25,9 +28,11 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventService service;
+    private final EventStreamService streamService;
 
-    public EventController(EventService service) {
+    public EventController(EventService service, EventStreamService streamService) {
         this.service = service;
+        this.streamService = streamService;
     }
 
 
@@ -71,5 +76,14 @@ public class EventController {
     @GetMapping("/{id}")
     public Event getEvent(@PathVariable String id) {
         return service.getById(id);
+    }
+
+    @Operation(
+            summary = "Suscribirse al flujo de eventos en tiempo real",
+            description = "Abre un canal Server-Sent Events. Cada evento creado se emite a todos los suscriptores."
+    )
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamEvents() {
+        return streamService.subscribe();
     }
 }
